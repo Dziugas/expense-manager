@@ -10,7 +10,19 @@ def sarasas(request):
     islaidu_tipai = Islaidu_tipai.objects.all().order_by('-aktyvus', 'tipas')
     islaidu_suma = list(Islaidos.objects.aggregate(Sum('suma')).values())[0]
 
-    return render(request, 'sarasas.html', {'islaidos': islaidos, 'islaidu_tipai':islaidu_tipai, 'islaidu_suma':islaidu_suma})
+    #Duomenys grafikui - nesugalvojau kaip švariai ištraukti ir įkišti į Google JS
+    tipai_ir_sumos = [['Tipas', 'Eur']]
+    laikinas = []
+    for tipas in islaidu_tipai:
+        laikinas.append(tipas)
+        tipo_suma = list(Islaidos.objects.filter(tipas=tipas).aggregate(Sum('suma')).values())[0]
+        laikinas.append(tipo_suma)
+        tipai_ir_sumos.append(laikinas)
+        laikinas = []
+    print(tipai_ir_sumos)
+
+    return render(request, 'sarasas.html', {'islaidos': islaidos, 'islaidu_tipai':islaidu_tipai, \
+                  'islaidu_suma':islaidu_suma, 'tipai_ir_sumos': tipai_ir_sumos})
 
 
 #IŠLAIDOS
