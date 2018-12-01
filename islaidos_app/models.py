@@ -15,6 +15,6 @@ class Islaidos(models.Model):
     suma = models.DecimalField(max_digits=9, decimal_places=2)
 
     def __str__(self):
-        return self.tipas
+        return self.tiekejas
 
 

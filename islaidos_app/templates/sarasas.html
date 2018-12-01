@@ -6,6 +6,31 @@
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+      google.charts.load("current", {packages:["corechart"]});
+      google.charts.setOnLoadCallback(drawChart);
+      function drawChart() {
+        var data = google.visualization.arrayToDataTable([
+
+          ['Task', 'Hours per Day'],
+          ['Work',     11],
+          ['Eat',      2],
+          ['Commute',  2],
+          ['Watch TV', 2],
+          ['Sleep',    7]
+
+        ]);
+
+        var options = {
+          title: 'Išlaidos',
+          is3D: true,
+        };
+
+        var chart = new google.visualization.PieChart(document.getElementById('piechart_3d'));
+        chart.draw(data, options);
+      }
+    </script>
 </head>
 <body>
 
@@ -19,18 +44,18 @@
         </tr>
         {% for tipas in islaidu_tipai %}
         <tr>
-            <th>
+            <td>
                 <a href="{% url 'pakeisti_tipa' tipas.id %}">{{tipas.tipas}}
                 </a>
-            </th>
-            <th>
+            </td>
+            <td>
                 <a href="{% url 'pakeisti_tipa' tipas.id %}">{{tipas.aktyvus}}
                 </a>
-            </th>
+            </td>
             {% if tipas %}
-            <th>
+            <td>
                 <a href="{% url 'istrinti_tipa' tipas.id %}">Ištrinti</a>
-            </th>
+            </td>
             {% endif %}
         </tr>
         {% endfor %}
@@ -55,39 +80,48 @@
         </tr>
         {% for islaida in islaidos %}
         <tr>
-            <th>
-                <a href="{% url 'pakeisti_is' islaida.id %}">{{islaida.data}}
+            <td>
+                <a href="{% url 'pakeisti_is' islaida.id %}">{{islaida.data|date:"Y m d"}}
                 </a>
-            </th>
-            <th>
+            </td>
+            <td>
                 <a href="{% url 'pakeisti_is' islaida.id %}">{{islaida.tipas}}
                 </a>
-            </th>
-            <th>
+            </td>
+            <td>
                 <a href="{% url 'pakeisti_is' islaida.id %}">{{islaida.tiekejas}}
                 </a>
-            </th>
-            <th>
+            </td>
+            <td>
                 <a href="{% url 'pakeisti_is' islaida.id %}">{{islaida.dok_nr}}
                 </a>
-            </th>
-            <th>
+            </td>
+            <td>
                 <a href="{% url 'pakeisti_is' islaida.id %}">{{islaida.suma}}
                 </a>
-            </th>
-            <th>
+            </td>
+            <td>
                 {% if islaida %}
                 <a href="{% url 'istrinti_is' islaida.id %}">Istrinti
                 </a>
                 {% endif %}
-            </th>
+            </td>
         </tr>
         {% endfor %}
-    </table>
+        <tr>
+            <td>Total</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>{{islaidu_suma|floatformat:2}}</td>
+        </tr>
 
+    </table>
     <p>
         <a href="{% url 'sukurti_is' %}">Sukurti naują išlaidų įrašą</a>
     </p>
+
+    <div id="piechart_3d" style="width: 900px; height: 500px;"></div>
 
 
 

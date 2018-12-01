@@ -1,13 +1,16 @@
 from django.shortcuts import render, redirect
 from .models import Islaidos, Islaidu_tipai
 from .forms import IslaidosForm, TiekejaiForm
+from django.db.models import Sum
 
 #BENDRAS PRADINIS
 
 def sarasas(request):
     islaidos = Islaidos.objects.all().order_by('-data')
     islaidu_tipai = Islaidu_tipai.objects.all().order_by('-aktyvus', 'tipas')
-    return render(request, 'sarasas.html', {'islaidos': islaidos, 'islaidu_tipai':islaidu_tipai})
+    islaidu_suma = list(Islaidos.objects.aggregate(Sum('suma')).values())[0]
+
+    return render(request, 'sarasas.html', {'islaidos': islaidos, 'islaidu_tipai':islaidu_tipai, 'islaidu_suma':islaidu_suma})
 
 
 #IŠLAIDOS
@@ -70,6 +73,9 @@ def istrinti_tipa(request, id):
         return redirect('sarasas')
 
     return render(request, 'tipo-istrynimo-patvirtinimas.html', {'islaidu_tipas': islaidu_tipas})
+
+
+
 
 
 
