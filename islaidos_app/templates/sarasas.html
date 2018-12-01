@@ -6,36 +6,47 @@
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Testas</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+          integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
 
     <!--Google chart script-->
     <!--<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>-->
     <!--<script type="text/javascript">-->
-      <!--google.charts.load("current", {packages:["corechart"]});-->
-      <!--google.charts.setOnLoadCallback(drawChart);-->
-      <!--function drawChart() {-->
-        <!--var data = google.visualization.arrayToDataTable({{tipai_ir_sumos}});-->
-        <!--var options = {-->
-          <!--title: 'Išlaidos pagal tipą',-->
-          <!--is3D: true,-->
-        <!--};-->
+    <!--google.charts.load("current", {packages:["corechart"]});-->
+    <!--google.charts.setOnLoadCallback(drawChart);-->
+    <!--function drawChart() {-->
+    <!--var data = google.visualization.arrayToDataTable({{tipai_ir_sumos}});-->
+    <!--var options = {-->
+    <!--title: 'Išlaidos pagal tipą',-->
+    <!--is3D: true,-->
+    <!--};-->
 
-        <!--var chart = new google.visualization.PieChart(document.getElementById('piechart_3d'));-->
-        <!--chart.draw(data, options);-->
-      <!--}-->
+    <!--var chart = new google.visualization.PieChart(document.getElementById('piechart_3d'));-->
+    <!--chart.draw(data, options);-->
+    <!--}-->
     <!--</script>-->
 
 </head>
 <body>
+<div class="jumbotron bg-dark text-muted text-center mb-5">
+    <div class="container">
+        <h1 class="display-1">Testas</h1>
+        <p class="lead">Basic CRUD appsas</p>
+    </div>
 
-    <h2>
+</div>
+<div class="container">
+    <div class="display-2 mb-4">
         Išlaidų tipai:
-    </h2>
+    </div>
     <table class="table">
+        <thead>
         <tr>
             <th>Pavadinimas</th>
             <th>Aktyvus</th>
+            <th>Trinti</th>
         </tr>
+        </thead>
         {% for tipas in islaidu_tipai %}
         <tr>
             <td>
@@ -54,16 +65,14 @@
         </tr>
         {% endfor %}
     </table>
-    <p>
-        <a href="{% url 'sukurti_tipa' %}">Įvesti naują</a>
-    </p>
+    <button class="btn btn-dark mb-5">
+        <a style="color: inherit; text-decoration:none;" href="{% url 'sukurti_tipa' %}">Įvesti naują</a>
+    </button>
 
 
-
-
-    <h2>
+    <div class="display-2 mb-4">
         Išlaidos:
-    </h2>
+    </div>
     <table class="table">
         <tr>
             <th>Data</th>
@@ -71,6 +80,7 @@
             <th>Tiekėjas</th>
             <th>Dok Nr</th>
             <th>Suma</th>
+            <th>Trinti</th>
         </tr>
         {% for islaida in islaidos %}
         <tr>
@@ -103,23 +113,32 @@
         </tr>
         {% endfor %}
         <tr>
-            <td>Total</td>
+            <td class="font-weight-bold">Total</td>
             <td></td>
             <td></td>
             <td></td>
-            <td>{{islaidu_suma|floatformat:2}}</td>
+            <td class="font-weight-bold">{{islaidu_suma|floatformat:2}}</td>
         </tr>
 
     </table>
-    <p>
-        <a href="{% url 'sukurti_is' %}">Įvesti naują</a>
-    </p>
+        <button class="btn btn-dark mb-5">
+        <a style="color: inherit; text-decoration:none;" href="{% url 'sukurti_is' %}">Įvesti naują</a>
+    </button>
 
     <!--Google chart-->
     <!--<div id="piechart_3d" style="width: 900px; height: 500px;"></div>-->
 
-<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+</div>
+
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
+        integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
+        integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+        crossorigin="anonymous"></script>
 </body>
 </html>
