@@ -5,8 +5,8 @@ from .forms import IslaidosForm, TiekejaiForm
 #BENDRAS PRADINIS
 
 def sarasas(request):
-    islaidos = Islaidos.objects.all()
-    islaidu_tipai = Islaidu_tipai.objects.all()
+    islaidos = Islaidos.objects.all().order_by('-data')
+    islaidu_tipai = Islaidu_tipai.objects.all().order_by('-aktyvus', 'tipas')
     return render(request, 'sarasas.html', {'islaidos': islaidos, 'islaidu_tipai':islaidu_tipai})
 
 

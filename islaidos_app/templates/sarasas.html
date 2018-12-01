@@ -8,36 +8,86 @@
     <title>Document</title>
 </head>
 <body>
-    <h2>
-        Išlaidos:
-    </h2>
-    <ul>
-        {% for islaida in islaidos %}
-        <a href="{% url 'pakeisti_is' islaida.id %}">
-            <li>{{islaida.data}}</li>
-        </a>
-        {% if islaida %}
-            <a href="{% url 'istrinti_is' islaida.id %}">Istrinti</a>
-        {% endif %}
-         <br><br>
-        {% endfor %}
-    </ul>
-    <a href="{% url 'sukurti_is' %}">Sukurti naują išlaidų įrašą</a>
+
     <h2>
         Išlaidų tipai:
     </h2>
-    <ul>
+    <table>
+        <tr>
+            <th>Pavadinimas</th>
+            <th>Aktyvus</th>
+        </tr>
         {% for tipas in islaidu_tipai %}
-        <a href="{% url 'pakeisti_tipa' tipas.id %}">
-            <li>{{tipas.tipas}} {{tipas.aktyvus}}</li>
-        </a>
-        {% if tipas %}
-        <a href="{% url 'istrinti_tipa' tipas.id %}">Ištrinti</a>
-        {% endif %}
-         <br><br>
+        <tr>
+            <th>
+                <a href="{% url 'pakeisti_tipa' tipas.id %}">{{tipas.tipas}}
+                </a>
+            </th>
+            <th>
+                <a href="{% url 'pakeisti_tipa' tipas.id %}">{{tipas.aktyvus}}
+                </a>
+            </th>
+            {% if tipas %}
+            <th>
+                <a href="{% url 'istrinti_tipa' tipas.id %}">Ištrinti</a>
+            </th>
+            {% endif %}
+        </tr>
         {% endfor %}
-    </ul>
-    <a href="{% url 'sukurti_tipa' %}">Sukurti naują išlaidų tipą</a>
+    </table>
+    <p>
+        <a href="{% url 'sukurti_tipa' %}">Sukurti naują išlaidų tipą</a>
+    </p>
+
+
+
+
+    <h2>
+        Išlaidos:
+    </h2>
+    <table>
+        <tr>
+            <th>Data</th>
+            <th>Tipas</th>
+            <th>Tiekėjas</th>
+            <th>Dok Nr</th>
+            <th>Suma</th>
+        </tr>
+        {% for islaida in islaidos %}
+        <tr>
+            <th>
+                <a href="{% url 'pakeisti_is' islaida.id %}">{{islaida.data}}
+                </a>
+            </th>
+            <th>
+                <a href="{% url 'pakeisti_is' islaida.id %}">{{islaida.tipas}}
+                </a>
+            </th>
+            <th>
+                <a href="{% url 'pakeisti_is' islaida.id %}">{{islaida.tiekejas}}
+                </a>
+            </th>
+            <th>
+                <a href="{% url 'pakeisti_is' islaida.id %}">{{islaida.dok_nr}}
+                </a>
+            </th>
+            <th>
+                <a href="{% url 'pakeisti_is' islaida.id %}">{{islaida.suma}}
+                </a>
+            </th>
+            <th>
+                {% if islaida %}
+                <a href="{% url 'istrinti_is' islaida.id %}">Istrinti
+                </a>
+                {% endif %}
+            </th>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <p>
+        <a href="{% url 'sukurti_is' %}">Sukurti naują išlaidų įrašą</a>
+    </p>
 
 
 
