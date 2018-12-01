@@ -8,13 +8,14 @@
     <title>Document</title>
 </head>
 <body>
+<form method="post">
+    {% csrf_token %}
+    <h2>Ar tikrai norite ištrinti šį išlaidų tipą?</h2>
+    <p>Tipas: {{tipas.tipas}}</p>
+    <p>Aktyvus: {{tipas.aktyvus}}</p>
+    <button type="submit">Ištrinti</button>
+</form>
 
-    <form method="post">
-        {% csrf_token %}
-        <h2>Ar tikrai norite ištrinti šį įrašą:</h2>
-        <p> Dokumento nr. {{islaidos.dok_nr}}, suma {{islaidos.suma}} ?</p>
-        <button type="submit">Ištrinti</button>
-    </form>
 
 </body>
 </html>

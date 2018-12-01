@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <h2>
+        Išlaidos:
+    </h2>
+    <ul>
+        {% for islaida in islaidos %}
+        <a href="{% url 'pakeisti_is' islaida.id %}">
+            <li>{{islaida.data}}</li>
+        </a>
+        {% if islaida %}
+            <a href="{% url 'istrinti_is' islaida.id %}">Istrinti</a>
+        {% endif %}
+         <br><br>
+        {% endfor %}
+    </ul>
+    <a href="{% url 'sukurti_is' %}">Sukurti naują išlaidų įrašą</a>
+    <h2>
+        Išlaidų tipai:
+    </h2>
+    <ul>
+        {% for tipas in islaidu_tipai %}
+        <a href="{% url 'pakeisti_tipa' tipas.id %}">
+            <li>{{tipas.tipas}} {{tipas.aktyvus}}</li>
+        </a>
+        {% if tipas %}
+        <a href="{% url 'istrinti_tipa' tipas.id %}">Ištrinti</a>
+        {% endif %}
+         <br><br>
+        {% endfor %}
+    </ul>
+    <a href="{% url 'sukurti_tipa' %}">Sukurti naują išlaidų tipą</a>
+
+
+
+
+</body>
+</html>
