@@ -10,7 +10,9 @@ def sarasas(request):
     islaidu_tipai = Islaidu_tipai.objects.all().order_by('-aktyvus', 'tipas')
     islaidu_suma = list(Islaidos.objects.aggregate(Sum('suma')).values())[0]
 
-    #Duomenys grafikui - nesugalvojau kaip švariai ištraukti ir įkišti į Google JS
+    #Duomenys grafikui - dar nesugalvojau kaip švariai ištraukti ir įkišti į šitą Google JS kodą:
+    #https://developers.google.com/chart/interactive/docs/gallery/piechart#making-a-3d-pie-chart
+
     tipai_ir_sumos = [['Tipas', 'Eur']]
     laikinas = []
     for tipas in islaidu_tipai:
@@ -19,7 +21,6 @@ def sarasas(request):
         laikinas.append(tipo_suma)
         tipai_ir_sumos.append(laikinas)
         laikinas = []
-    print(tipai_ir_sumos)
 
     return render(request, 'sarasas.html', {'islaidos': islaidos, 'islaidu_tipai':islaidu_tipai, \
                   'islaidu_suma':islaidu_suma, 'tipai_ir_sumos': tipai_ir_sumos})
@@ -50,7 +51,7 @@ def istrinti_is(request, id):
     islaidu_irasas = Islaidos.objects.get(id=id)
 
     if request.method == 'POST':
-        islaidos.delete()
+        islaidu_irasas.delete()
         return redirect('sarasas')
 
     return render(request, 'islaidu-istrynimo-patvirtinimas.html', {'islaidu_irasas': islaidu_irasas})
