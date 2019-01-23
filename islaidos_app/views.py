@@ -1,29 +1,27 @@
 from django.shortcuts import render, redirect
-from .models import Islaidos, Islaidu_tipai
+from .models import Islaidos, IslaiduTipai
 from .forms import IslaidosForm, TiekejaiForm
 from django.db.models import Sum
 
-#BENDRAS PRADINIS
 
+
+def data_for_the_google_chart():
+    visi_islaidu_tipai = IslaiduTipai.objects.all()
+    islaidu_tipu_pavadinimai = [islaidu_tipas.tipas for islaidu_tipas in visi_islaidu_tipai]
+    print(islaidu_tipu_pavadinimai)
+    for islaidu_tipo_pavadinimas in islaidu_tipu_pavadinimai:
+        islaidos_tipui = Islaidos.objects.filter(tipas__tipas=islaidu_tipo_pavadinimas)
+        islaidu_tipui_suma = islaidos_tipui.aggregate(Sum('suma'))
+        print(islaidos_tipui, islaidu_tipui_suma)
+
+#BENDRAS PRADINIS
 def sarasas(request):
+    data_for_the_google_chart()
     islaidos = Islaidos.objects.all().order_by('-data')
-    islaidu_tipai = Islaidu_tipai.objects.all().order_by('-aktyvus', 'tipas')
+    islaidu_tipai = IslaiduTipai.objects.all().order_by('-aktyvus', 'tipas')
     islaidu_suma = list(Islaidos.objects.aggregate(Sum('suma')).values())[0]
 
-    #Duomenys grafikui - dar nesugalvojau kaip švariai ištraukti ir įkišti į šitą Google JS kodą:
-    #https://developers.google.com/chart/interactive/docs/gallery/piechart#making-a-3d-pie-chart
-
-    tipai_ir_sumos = [['Tipas', 'Eur']]
-    laikinas = []
-    for tipas in islaidu_tipai:
-        laikinas.append(tipas)
-        tipo_suma = list(Islaidos.objects.filter(tipas=tipas).aggregate(Sum('suma')).values())[0]
-        laikinas.append(tipo_suma)
-        tipai_ir_sumos.append(laikinas)
-        laikinas = []
-
-    return render(request, 'sarasas.html', {'islaidos': islaidos, 'islaidu_tipai':islaidu_tipai, \
-                  'islaidu_suma':islaidu_suma, 'tipai_ir_sumos': tipai_ir_sumos})
+    return render(request, 'sarasas.html', {'islaidos': islaidos, 'islaidu_tipai':islaidu_tipai, 'islaidu_suma':islaidu_suma})
 
 
 #IŠLAIDOS
@@ -69,7 +67,7 @@ def sukurti_tipa(request):
     return render(request, 'tipas-form.html', {'form': form})
 
 def pakeisti_tipa(request, id):
-    islaidu_tipas = Islaidu_tipai.objects.get(id=id)
+    islaidu_tipas = IslaiduTipai.objects.get(id=id)
     form = TiekejaiForm(request.POST or None, instance=islaidu_tipas)
 
     if form.is_valid():
@@ -79,7 +77,7 @@ def pakeisti_tipa(request, id):
     return render(request, 'tipas-form.html', {'form': form, 'islaidu_tipas': islaidu_tipas})
 
 def istrinti_tipa(request, id):
-    islaidu_tipas = Islaidu_tipai.objects.get(id=id)
+    islaidu_tipas = IslaiduTipai.objects.get(id=id)
 
     if request.method == 'POST':
         islaidu_tipas.delete()

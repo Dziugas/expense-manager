@@ -1,6 +1,6 @@
 from django import forms
 from django.forms import DateInput
-from .models import Islaidos, Islaidu_tipai
+from .models import Islaidos, IslaiduTipai
 
 class IslaidosForm(forms.ModelForm):
     class Meta:
@@ -12,5 +12,5 @@ class IslaidosForm(forms.ModelForm):
 
 class TiekejaiForm(forms.ModelForm):
     class Meta:
-        model = Islaidu_tipai
+        model = IslaiduTipai
         fields = ['tipas', 'aktyvus']
