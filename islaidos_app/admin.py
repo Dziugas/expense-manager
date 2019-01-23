@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Islaidos, IslaiduTipai
+from .models import Expenses, ExpenseTypes
 
-admin.site.register(Islaidos)
-admin.site.register(IslaiduTipai)
+admin.site.register(Expenses)
+admin.site.register(ExpenseTypes)
