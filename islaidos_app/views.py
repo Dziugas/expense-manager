@@ -3,8 +3,6 @@ from .models import Islaidos, IslaiduTipai
 from .forms import IslaidosForm, TiekejaiForm
 from django.db.models import Sum
 
-import json
-from django.core.serializers.json import DjangoJSONEncoder
 
 def data_for_the_google_chart():
     visi_islaidu_tipai = IslaiduTipai.objects.all()
@@ -17,8 +15,8 @@ def data_for_the_google_chart():
         l.append([islaidu_tipo_pavadinimas, float(tvarkinga_islaidu_tipui_suma)])
     return l
 
-#BENDRAS PRADINIS
-def sarasas(request):
+#Main page view
+def index(request):
     chart_data = data_for_the_google_chart()
     islaidos = Islaidos.objects.all().order_by('-data')
     islaidu_tipai = IslaiduTipai.objects.all().order_by('-aktyvus', 'tipas')
@@ -27,9 +25,8 @@ def sarasas(request):
                   {'islaidos': islaidos, 'islaidu_tipai':islaidu_tipai, 'islaidu_suma':islaidu_suma, 'chart_data':chart_data})
 
 
-#IŠLAIDOS
-
-def sukurti_is(request):
+#Expense views
+def createExpense(request):
     form = IslaidosForm(request.POST or None)
 
     if form.is_valid():
@@ -38,7 +35,7 @@ def sukurti_is(request):
 
     return render(request, 'islaidos-form.html', {'form': form})
 
-def pakeisti_is(request, id):
+def editExpense(request, id):
     islaidu_irasas = Islaidos.objects.get(id=id)
     form = IslaidosForm(request.POST or None, instance=islaidu_irasas)
 
@@ -48,7 +45,7 @@ def pakeisti_is(request, id):
 
     return render(request, 'islaidos-form.html', {'form':form, 'islaidu_irasas': islaidu_irasas})
 
-def istrinti_is(request, id):
+def deleteExpense(request, id):
     islaidu_irasas = Islaidos.objects.get(id=id)
 
     if request.method == 'POST':
@@ -58,9 +55,8 @@ def istrinti_is(request, id):
     return render(request, 'islaidu-istrynimo-patvirtinimas.html', {'islaidu_irasas': islaidu_irasas})
 
 
-# IŠLAIDŲ TIPAI
-
-def sukurti_tipa(request):
+#Expense type views
+def createType(request):
     form = TiekejaiForm(request.POST or None)
 
     if form.is_valid():
@@ -69,7 +65,7 @@ def sukurti_tipa(request):
 
     return render(request, 'tipas-form.html', {'form': form})
 
-def pakeisti_tipa(request, id):
+def editType(request, id):
     islaidu_tipas = IslaiduTipai.objects.get(id=id)
     form = TiekejaiForm(request.POST or None, instance=islaidu_tipas)
 
@@ -79,7 +75,7 @@ def pakeisti_tipa(request, id):
 
     return render(request, 'tipas-form.html', {'form': form, 'islaidu_tipas': islaidu_tipas})
 
-def istrinti_tipa(request, id):
+def deleteType(request, id):
     islaidu_tipas = IslaiduTipai.objects.get(id=id)
 
     if request.method == 'POST':

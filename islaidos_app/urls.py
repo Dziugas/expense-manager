@@ -1,18 +1,18 @@
 from django.urls import path
-from .views import sarasas, sukurti_is, pakeisti_is, istrinti_is, sukurti_tipa, pakeisti_tipa, istrinti_tipa
+from .views import index, createExpense, editExpense, deleteExpense, createType, editType, deleteType
 
 urlpatterns = [
     #BENDRAS PRADINIS
-    path('', sarasas, name='sarasas'),
+    path('', index, name='sarasas'),
 
     #IŠLAIDOS
-    path('naujos_islaidos', sukurti_is, name='sukurti_is'),
-    path('pakeisti_islaidas/<int:id>/', pakeisti_is, name='pakeisti_is'),
-    path('istrinti_islaidas/<int:id>/', istrinti_is, name='istrinti_is'),
+    path('new-expense', createExpense, name='sukurti_is'),
+    path('edit-expense/<int:id>/', editExpense, name='pakeisti_is'),
+    path('delete-expense/<int:id>/', deleteExpense, name='istrinti_is'),
 
     #IŠLAIDŲ TIPAI
-    path('naujas_tipas', sukurti_tipa, name='sukurti_tipa'),
-    path('pakeisti_tipa/<int:id>/', pakeisti_tipa, name='pakeisti_tipa'),
-    path('istrinti_tipa/<int:id>/', istrinti_tipa, name='istrinti_tipa'),
+    path('new-type', createType, name='sukurti_tipa'),
+    path('edit-type/<int:id>/', editType, name='pakeisti_tipa'),
+    path('delete-type/<int:id>/', deleteType, name='istrinti_tipa'),
 ]
 
