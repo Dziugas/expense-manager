@@ -3,25 +3,28 @@ from .models import Islaidos, IslaiduTipai
 from .forms import IslaidosForm, TiekejaiForm
 from django.db.models import Sum
 
-
+import json
+from django.core.serializers.json import DjangoJSONEncoder
 
 def data_for_the_google_chart():
     visi_islaidu_tipai = IslaiduTipai.objects.all()
     islaidu_tipu_pavadinimai = [islaidu_tipas.tipas for islaidu_tipas in visi_islaidu_tipai]
-    print(islaidu_tipu_pavadinimai)
+    l = [['Islaidu tipas', 'Total Suma']]
     for islaidu_tipo_pavadinimas in islaidu_tipu_pavadinimai:
         islaidos_tipui = Islaidos.objects.filter(tipas__tipas=islaidu_tipo_pavadinimas)
         islaidu_tipui_suma = islaidos_tipui.aggregate(Sum('suma'))
-        print(islaidos_tipui, islaidu_tipui_suma)
+        tvarkinga_islaidu_tipui_suma = islaidu_tipui_suma['suma__sum'] or 0.00
+        l.append([islaidu_tipo_pavadinimas, float(tvarkinga_islaidu_tipui_suma)])
+    return l
 
 #BENDRAS PRADINIS
 def sarasas(request):
-    data_for_the_google_chart()
+    chart_data = data_for_the_google_chart()
     islaidos = Islaidos.objects.all().order_by('-data')
     islaidu_tipai = IslaiduTipai.objects.all().order_by('-aktyvus', 'tipas')
     islaidu_suma = list(Islaidos.objects.aggregate(Sum('suma')).values())[0]
-
-    return render(request, 'sarasas.html', {'islaidos': islaidos, 'islaidu_tipai':islaidu_tipai, 'islaidu_suma':islaidu_suma})
+    return render(request, 'sarasas.html', \
+                  {'islaidos': islaidos, 'islaidu_tipai':islaidu_tipai, 'islaidu_suma':islaidu_suma, 'chart_data':chart_data})
 
 
 #IŠLAIDOS
