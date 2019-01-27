@@ -1,18 +1,21 @@
 from django.urls import path
-from .views import index, createExpense, editExpense, deleteExpense, createType, editType, deleteType
+from . import views
 
 urlpatterns = [
-    #BENDRAS PRADINIS
-    path('', index, name='sarasas'),
+    #Home
+    path('', views.home, name='home'),
 
-    #IŠLAIDOS
-    path('new-expense', createExpense, name='sukurti_is'),
-    path('edit-expense/<int:id>/', editExpense, name='pakeisti_is'),
-    path('delete-expense/<int:id>/', deleteExpense, name='istrinti_is'),
+    #Keepers
+    path('keepers/<int:keeper_id>/', views.viewKeeper, name='viewKeeper'),
 
-    #IŠLAIDŲ TIPAI
-    path('new-type', createType, name='sukurti_tipa'),
-    path('edit-type/<int:id>/', editType, name='pakeisti_tipa'),
-    path('delete-type/<int:id>/', deleteType, name='istrinti_tipa'),
+    #Expenses
+    path('keepers/<int:keeper_id>/new-expense', views.createExpense, name='create_expense'),
+    path('keepers/<int:keeper_id>/edit-expense/<int:expense_id>/', views.editExpense, name='edit_expense'),
+    path('keepers/<int:keeper_id>/delete-expense/<int:expense_id>/', views.deleteExpense, name='delete_expense'),
+
+    #Expense Types
+    path('keepers/<int:keeper_id>/new-type', views.createType, name='create_type'),
+    path('keepers/<int:keeper_id>/edit-type/<int:type_id>', views.editType, name='edit_type'),
+    path('keepers/<int:keeper_id>/delete-type/<int:type_id>', views.deleteType, name='delete_type'),
 ]
 

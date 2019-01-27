@@ -13,7 +13,7 @@
         var data = google.visualization.arrayToDataTable(djangoData);
 
         var options = {
-          title: 'Total expenditure by expense type',
+          title: 'Ependiture by expense type',
           is3D: true,
         };
 
@@ -24,6 +24,7 @@
     </script>
 {% endblock %}
 {% block content %}
+
 <div class="display-4 mb-4">
     Expense types:
 </div>
@@ -36,19 +37,21 @@
         <th>Delete</th>
     </tr>
     </thead>
-    {% for tipas in islaidu_tipai %}
+    {% for type in expense_types %}
     <tr>
         <td>
-            <a href="{% url 'pakeisti_tipa' tipas.id %}">{{tipas.tipas}}
+            <a href="{% url 'edit_type' keeper.id type.id %}">{{type.tipas}}
             </a>
         </td>
         <td>
-            <a href="{% url 'pakeisti_tipa' tipas.id %}">{{tipas.aktyvus}}
+            <a href="{% url 'edit_type' keeper.id type.id %}">
+                {{type.aktyvus}}
             </a>
+
         </td>
-        {% if tipas %}
+        {% if type %}
         <td>
-            <a style="text-decoration: none" href="{% url 'istrinti_tipa' tipas.id %}">Delete</a>
+            <a style="text-decoration: none" href="{% url 'delete_type' keeper.id type.id %}">Delete</a>
         </td>
         {% endif %}
     </tr>
@@ -56,7 +59,7 @@
 </table>
 
 <button class="btn btn-dark mb-5">
-    <a style="color: inherit; text-decoration:none;" href="{% url 'sukurti_tipa' %}">Create New</a>
+    <a style="color: inherit; text-decoration:none;" href="{% url 'create_type' keeper.id %}">Create New</a>
 </button>
 
 <div class="display-4 mb-4">
@@ -67,36 +70,41 @@
     <tr>
         <th>Date</th>
         <th>Type</th>
+        <th>Description</th>
         <th>Supplier</th>
         <th>Doc No</th>
-        <th>Sum</th>
+        <th>Amount</th>
         <th>Delete</th>
     </tr>
-    {% for islaida in islaidos %}
+    {% for expense in expenses %}
     <tr>
         <td>
-            <a href="{% url 'pakeisti_is' islaida.id %}">{{islaida.data|date:"Y m d"}}
+            <a href="{% url 'delete_expense' keeper.id expense.id %}">{{expense.data|date:"Y m d"}}
             </a>
         </td>
         <td>
-            <a href="{% url 'pakeisti_is' islaida.id %}">{{islaida.tipas}}
+            <a href="{% url 'edit_expense' keeper.id expense.id %}">{{expense.tipas}}
             </a>
         </td>
         <td>
-            <a href="{% url 'pakeisti_is' islaida.id %}">{{islaida.tiekejas}}
+            <a href="{% url 'edit_expense' keeper.id expense.id %}">{{expense.description}}
             </a>
         </td>
         <td>
-            <a href="{% url 'pakeisti_is' islaida.id %}">{{islaida.dok_nr}}
+            <a href="{% url 'edit_expense' keeper.id expense.id %}">{{expense.tiekejas}}
             </a>
         </td>
         <td>
-            <a href="{% url 'pakeisti_is' islaida.id %}">{{islaida.suma}}
+            <a href="{% url 'edit_expense' keeper.id expense.id %}">{{expense.dok_nr}}
             </a>
         </td>
         <td>
-            {% if islaida %}
-            <a href="{% url 'istrinti_is' islaida.id %}">Delete
+            <a href="{% url 'edit_expense' keeper.id expense.id %}">{{expense.suma}}
+            </a>
+        </td>
+        <td>
+            {% if expense %}
+            <a href="{% url 'delete_expense' keeper.id expense.id %}">Delete
             </a>
             {% endif %}
         </td>
@@ -107,12 +115,12 @@
         <td></td>
         <td></td>
         <td></td>
-        <td class="font-weight-bold">{{islaidu_suma|floatformat:2}}</td>
+        <td class="font-weight-bold">{{expenses_total|floatformat:2}}</td>
     </tr>
 
 </table>
 <button class="btn btn-dark mb-5">
-    <a style="color: inherit; text-decoration:none;" href="{% url 'sukurti_is' %}">Create New</a>
+    <a style="color: inherit; text-decoration:none;" href="{% url 'create_expense' keeper.id %}">Create New</a>
 </button>
 
 <div class="mx-auto" id="piechart" style="width: 900px; height: 500px;"></div>

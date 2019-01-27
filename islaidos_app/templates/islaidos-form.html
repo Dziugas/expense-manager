@@ -4,7 +4,19 @@
 <form method="POST">
     <div class="form-group">
         {% csrf_token %}
-        {{ form }}
+        <div class="lead">Date</div>
+        {{ form.data }}
+        <div class="lead">Type</div>
+        {{ form.tipas }}
+        <div class="lead">Description</div>
+        {{ form.description }}
+        <div class="lead">Supplier</div>
+        {{ form.tiekejas }}
+        <div class="lead">Document number</div>
+        {{ form.dok_nr }}
+        <div class="lead">Amount</div>
+        {{ form.suma }}
+        {{ form.keeper.as_hidden }}
     </div>
     <button class="btn btn-dark mb-5" type="submit" style="text-decoration:none;">
         Save

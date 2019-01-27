@@ -4,9 +4,9 @@
     {% csrf_token %}
 
     <p class="lead font-weight-bold">Are you sure you want to delete this?</p>
-    <p> Dokumento nr. {{islaidu_irasas.dok_nr}}</p>
-    <p> Tiekejas {{islaidu_irasas.tiekejas}}</p>
-    <p> Išlaidų suma {{islaidu_irasas.suma}} EUR</p>
+    <p> Dokumen number: {{expense.dok_nr}}</p>
+    <p> Supplier: {{expense.tiekejas}}</p>
+    <p> Expense amount: {{expense.suma}} EUR</p>
 
     <button type="submit" class="btn btn-dark mb-5">
         <a style="color: inherit; text-decoration:none;">Delete</a>
