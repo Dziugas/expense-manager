@@ -18,7 +18,7 @@
 <div class="jumbotron bg-dark text-muted text-center mb-5">
     <div class="container">
         <h1 class="display-1">
-                {% if 'keepers' in request.path %}
+                {% if '/keepers/' in request.path %}
                 {{keeper.keeper_name}}
                 {% else %}
                 Expense Keepers

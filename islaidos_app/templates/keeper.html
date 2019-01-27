@@ -37,21 +37,20 @@
         <th>Delete</th>
     </tr>
     </thead>
-    {% for type in expense_types %}
+    {% for tipas in expense_types %}
     <tr>
         <td>
-            <a href="{% url 'edit_type' keeper.id type.id %}">{{type.tipas}}
+            <a href="{% url 'edit_type' keeper.id tipas.id %}">{{tipas.tipas}}
             </a>
         </td>
         <td>
-            <a href="{% url 'edit_type' keeper.id type.id %}">
-                {{type.aktyvus}}
+            <a href="{% url 'edit_type' keeper.id tipas.id %}">
+                {{tipas.aktyvus}}
             </a>
-
         </td>
-        {% if type %}
+        {% if tipas %}
         <td>
-            <a style="text-decoration: none" href="{% url 'delete_type' keeper.id type.id %}">Delete</a>
+            <a style="text-decoration: none" href="{% url 'delete_type' keeper.id tipas.id %}">Delete</a>
         </td>
         {% endif %}
     </tr>
@@ -79,7 +78,7 @@
     {% for expense in expenses %}
     <tr>
         <td>
-            <a href="{% url 'delete_expense' keeper.id expense.id %}">{{expense.data|date:"Y m d"}}
+            <a href="{% url 'edit_expense' keeper.id expense.id %}">{{expense.data|date:"Y m d"}}
             </a>
         </td>
         <td>
@@ -115,7 +114,9 @@
         <td></td>
         <td></td>
         <td></td>
+        <td></td>
         <td class="font-weight-bold">{{expenses_total|floatformat:2}}</td>
+        <td></td>
     </tr>
 
 </table>

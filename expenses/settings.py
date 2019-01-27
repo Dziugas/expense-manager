@@ -50,7 +50,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'islaidos.urls'
+ROOT_URLCONF = 'expenses.urls'
 
 TEMPLATES = [
     {
@@ -68,7 +68,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'islaidos.wsgi.application'
+WSGI_APPLICATION = 'expenses.wsgi.application'
 
 
 # Database
