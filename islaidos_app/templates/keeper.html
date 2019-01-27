@@ -7,7 +7,6 @@
 
       function drawChart() {
         var djangoData = "{{ chart_data }}";
-        console.log(djangoData)
         var djangoData = djangoData.replace(/&#39;/g,'"');
         var djangoData = JSON.parse(djangoData);
         var data = google.visualization.arrayToDataTable(djangoData);
@@ -20,46 +19,88 @@
         var chart = new google.visualization.PieChart(document.getElementById('piechart'));
 
         chart.draw(data, options);
-      }
+      };
     </script>
+
+    <script type="text/javascript">
+    google.charts.load('current', {packages: ['corechart', 'bar']});
+    google.charts.setOnLoadCallback(drawBasic);
+
+      function drawBasic() {
+      var djangoData2 = "{{ chart_data_2 }}";
+      var djangoData2 = djangoData2.replace(/&#39;/g,'"');
+      console.log(djangoData2);
+      var djangoData2 = JSON.parse(djangoData2);
+      var data = google.visualization.arrayToDataTable(djangoData2);
+
+      var options = {
+        title: 'Expenditure on different dates',
+        chartArea: {width: '75%'},
+        hAxis: {
+          title: 'EUR',
+          minValue: 0
+        },
+        vAxis: {
+          title: 'Days'
+        }
+      };
+
+      var chart = new google.visualization.BarChart(document.getElementById('chart_div'));
+      chart.draw(data, options);
+    }
+    </script>
+
+
+
+
 {% endblock %}
 {% block content %}
 
 <div class="display-4 mb-4">
     Expense types:
 </div>
+<div class="row">
+    <div class="col-6">
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Name</th>
+                <th>Active</th>
+                <th>Delete</th>
+            </tr>
+            </thead>
+            {% for tipas in expense_types %}
+            <tr>
+                <td>
+                    <a href="{% url 'edit_type' keeper.id tipas.id %}">{{tipas.tipas}}
+                    </a>
+                </td>
+                <td>
+                    <a href="{% url 'edit_type' keeper.id tipas.id %}">
+                        {{tipas.aktyvus}}
+                    </a>
+                </td>
+                {% if tipas %}
+                <td>
+                    <a style="text-decoration: none" href="{% url 'delete_type' keeper.id tipas.id %}">Delete</a>
+                </td>
+                {% endif %}
+            </tr>
+            {% endfor %}
+        </table>
 
-<table class="table">
-    <thead>
-    <tr>
-        <th>Name</th>
-        <th>Active</th>
-        <th>Delete</th>
-    </tr>
-    </thead>
-    {% for tipas in expense_types %}
-    <tr>
-        <td>
-            <a href="{% url 'edit_type' keeper.id tipas.id %}">{{tipas.tipas}}
-            </a>
-        </td>
-        <td>
-            <a href="{% url 'edit_type' keeper.id tipas.id %}">
-                {{tipas.aktyvus}}
-            </a>
-        </td>
-        {% if tipas %}
-        <td>
-            <a style="text-decoration: none" href="{% url 'delete_type' keeper.id tipas.id %}">Delete</a>
-        </td>
-        {% endif %}
-    </tr>
-    {% endfor %}
-</table>
+        <button class="btn btn-dark mb-5">
+            <a style="color: inherit; text-decoration:none;" href="{% url 'create_type' keeper.id %}">Create New</a>
+        </button>
+    </div>
 
-<button class="btn btn-dark mb-5">
-    <a style="color: inherit; text-decoration:none;" href="{% url 'create_type' keeper.id %}">Create New</a>
-</button>
+    <div class="col-6">
+        <div class="" id="piechart" style="width: 500px; height: 300px;"></div>
+    </div>
+</div>
+
+
+
 
 <div class="display-4 mb-4">
     Expenses:
@@ -124,6 +165,11 @@
     <a style="color: inherit; text-decoration:none;" href="{% url 'create_expense' keeper.id %}">Create New</a>
 </button>
 
-<div class="mx-auto" id="piechart" style="width: 900px; height: 500px;"></div>
+<div id="chart_div"></div>
+
+<hr>
+<br>
+<br>
+<br>
 
 {% endblock %}

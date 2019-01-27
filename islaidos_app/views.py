@@ -8,7 +8,7 @@ def expenditure_by_date_for_google_chart(keeper_id):
     all_expenses_for_current_keeper = Expenses.objects.filter(keeper=keeper_id)
     distinct_expense_dates_for_that_keeper = all_expenses_for_current_keeper.values('data').distinct()
     distinct_expense_dates_extracted = [date['data'] for date in distinct_expense_dates_for_that_keeper]
-    list_for_chart = [['Date', 'Expense']]
+    list_for_chart = [['Date', 'EUR']]
     for date in distinct_expense_dates_extracted:
         expenses_on_that_date = Expenses.objects.filter(data=date)
         sum_of_expenses_on_that_day = expenses_on_that_date.aggregate(Sum('suma'))
@@ -47,7 +47,7 @@ def viewKeeper(request, keeper_id):
     expenses = Expenses.objects.filter(keeper=keeper_).order_by('-data')
     expenses_total = list(expenses.aggregate(Sum('suma')).values())[0]
     return render(request, 'keeper.html', {'keeper':keeper_, 'expense_types':expense_types, 'expenses':expenses, \
-                                           'chart_data':chart_data, 'expenses_total':expenses_total})
+                                           'chart_data':chart_data, 'expenses_total':expenses_total, 'chart_data_2':chart_data_2})
 
 def createExpense(request, keeper_id):
     form = ExpenseForm(request.POST or None, initial={'keeper':keeper_id})
