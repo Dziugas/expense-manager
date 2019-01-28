@@ -5,7 +5,7 @@ from django.db.models import Sum
 
 
 def expenditure_by_date_for_google_chart(keeper_id):
-    all_expenses_for_current_keeper = Expenses.objects.filter(keeper=keeper_id)
+    all_expenses_for_current_keeper = Expenses.objects.filter(keeper=keeper_id).order_by('data')
     distinct_expense_dates_for_that_keeper = all_expenses_for_current_keeper.values('data').distinct()
     distinct_expense_dates_extracted = [date['data'] for date in distinct_expense_dates_for_that_keeper]
     list_for_chart = [['Date', 'EUR']]
@@ -18,7 +18,7 @@ def expenditure_by_date_for_google_chart(keeper_id):
 
 
 def expenditure_by_keepers_expense_types_for_google_chart(keeper_id):
-    all_expense_types_for_current_keeper = ExpenseTypes.objects.filter(keeper=keeper_id)
+    all_expense_types_for_current_keeper = ExpenseTypes.objects.filter(keeper=keeper_id).order_by('tipas')
     expense_type_names = [expense_type.tipas for expense_type in all_expense_types_for_current_keeper]
     list_for_chart = [['Expense type', 'Total Sum']]
     for expense_type_name in expense_type_names:
@@ -44,7 +44,7 @@ def viewKeeper(request, keeper_id):
     chart_data_2 = expenditure_by_date_for_google_chart(keeper_id)
     keeper_ = Keeper.objects.get(id=keeper_id)
     expense_types = ExpenseTypes.objects.filter(keeper=keeper_).order_by('-aktyvus', 'tipas')
-    expenses = Expenses.objects.filter(keeper=keeper_).order_by('-data')
+    expenses = Expenses.objects.filter(keeper=keeper_).order_by('data')
     expenses_total = list(expenses.aggregate(Sum('suma')).values())[0]
     return render(request, 'keeper.html', {'keeper':keeper_, 'expense_types':expense_types, 'expenses':expenses, \
                                            'chart_data':chart_data, 'expenses_total':expenses_total, 'chart_data_2':chart_data_2})
