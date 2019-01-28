@@ -17,6 +17,6 @@ google.charts.setOnLoadCallback(drawBasic);
     }
   };
 
-  var chart = new google.visualization.BarChart(document.getElementById('chart_div'));
+  var chart = new google.visualization.BarChart(document.getElementById('bar_chart_id'));
   chart.draw(data, options);
 }

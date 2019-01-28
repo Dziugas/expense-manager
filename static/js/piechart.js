@@ -10,7 +10,7 @@ var options = {
   is3D: true,
 };
 
-var chart = new google.visualization.PieChart(document.getElementById('piechart'));
+var chart = new google.visualization.PieChart(document.getElementById('piechart_id'));
 
 chart.draw(data, options);
 };
