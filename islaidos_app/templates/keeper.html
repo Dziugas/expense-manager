@@ -1,11 +1,14 @@
 {% extends 'base.html' %}
 {% block chart %}
     <!--data to pass into separate js files for the google charts-->
-    {{ chart_data|json_script:"pie_chart_data" }}
-    {{ chart_data_2|json_script:"bar_chart_data" }}
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+
+    {{ chart_data|json_script:"pie_chart_data" }}
     <script type="text/javascript" src="/static/js/piechart.js"></script>
+
+    {{ chart_data_2|json_script:"bar_chart_data" }}
     <script type="text/javascript" src="/static/js/barchart.js"></script>
+
 {% endblock %}
 {% block content %}
 
@@ -48,7 +51,9 @@
     </div>
 
     <div class="col-lg-6 col-md-6 col-sm-12">
-        <div class="" id="piechart_id" style="width: 100%; height: 100%;"></div>
+        {% if chart_data %}
+            <div class="" id="piechart_id" style="width: 100%; height: 100%;"></div>
+        {% endif %}
     </div>
 </div>
 
@@ -114,9 +119,9 @@
 <button class="btn btn-dark mb-5">
     <a style="color: inherit; text-decoration:none;" href="{% url 'create_expense' keeper.id %}">Create New</a>
 </button>
-
+{% if chart_data_2 %}
 <div id="bar_chart_id"></div>
-
+{% endif %}
 <hr>
 <br>
 <br>
