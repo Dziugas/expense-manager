@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/2.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/2.1/ref/settings/
 """
-
+from . import shmeys
 import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -79,7 +79,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'expense_keeper',
         'USER': 'postgres',
-        'PASSWORD': 'test2991',
+        'PASSWORD': shmeys.PSQLPW,
         'HOST': 'localhost',
         'PORT': '5433',
     }
