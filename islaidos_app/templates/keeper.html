@@ -57,7 +57,11 @@
                 </td>
                 <td>
                     <a href="{% url 'edit_type' keeper.id tipas.id %}">
-                        {{tipas.aktyvus}}
+                        {% if tipas.aktyvus is True %}
+                        Yes
+                        {% else %}
+                        ---
+                        {% endif %}
                     </a>
                 </td>
                 {% if tipas %}
