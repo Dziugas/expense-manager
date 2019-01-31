@@ -15,7 +15,6 @@ def expenditure_by_date_for_google_chart(keeper_id):
         list_for_chart.append([date.strftime('%F'), float(sum_of_expenses_on_that_day_nicely_printed)])
     if list_for_chart:
         list_for_chart.insert(0, ['Date', 'EUR'])
-    print(list_for_chart)
     return list_for_chart
 
 def expenditure_by_keepers_expense_types_for_google_chart(keeper_id):
@@ -29,7 +28,6 @@ def expenditure_by_keepers_expense_types_for_google_chart(keeper_id):
         list_for_chart.append([expense_type_name, float(sum_of_expenses_for_type_nicely_printed)])
     if list_for_chart:
         list_for_chart.insert(0, ['Expense type', 'Total Sum'])
-    print(list_for_chart)
     return list_for_chart
 
 def home(request):
