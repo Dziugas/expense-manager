@@ -47,58 +47,82 @@ def viewKeeper(request, keeper_id):
     chart_data = expenditure_by_keepers_expense_types_for_google_chart(keeper_id)
     chart_data_2 = expenditure_by_date_for_google_chart(keeper_id)
     keeper_ = Keeper.objects.get(id=keeper_id)
-    expense_types = ExpenseTypes.objects.filter(keeper=keeper_).order_by('-aktyvus', 'tipas')
+    expense_types = ExpenseTypes.objects.filter(keeper=keeper_)
+    for expense_type in expense_types:
+        expenses = Expenses.objects.filter(tipas=expense_type)
+        if expenses:
+            expense_type.aktyvus =True
+        else:
+            expense_type.aktyvus = False
+    expense_types.order_by('-aktyvus', 'tipas')
     expenses = Expenses.objects.filter(keeper=keeper_).order_by('data')
     expenses_total = list(expenses.aggregate(Sum('suma')).values())[0]
     return render(request, 'keeper.html', {'keeper':keeper_, 'expense_types':expense_types, 'expenses':expenses, \
                                            'chart_data':chart_data, 'expenses_total':expenses_total, 'chart_data_2':chart_data_2})
-
-def createExpense(request, keeper_id):
-    form = ExpenseForm(request.POST or None, initial={'keeper':keeper_id})
-    keeper_ = Keeper.objects.get(id=keeper_id)
-    form.fields['tipas'].queryset = ExpenseTypes.objects.filter(keeper=keeper_)
+def editKeeper(request, keeper_id):
+    keeper = Keeper.objects.get(id=keeper_id)
+    form = KeeperForm(request.POST or None, instance=keeper)
     if form.is_valid():
         form.save()
         return redirect('viewKeeper', keeper_id)
-    return render(request, 'expense-form.html', {'form': form})
+    return render(request, 'keeper-form.html', {'form':form, 'keeper':keeper})
+
+def deleteKeeper(request, keeper_id):
+    keeper = Keeper.objects.get(id=keeper_id)
+    if request.method == 'POST':
+        keeper.delete()
+        return redirect('/')
+    return render(request, 'confirm-keeper-deletion.html', {'keeper': keeper})
+
+def createExpense(request, keeper_id):
+    form = ExpenseForm(request.POST or None, initial={'keeper':keeper_id})
+    keeper = Keeper.objects.get(id=keeper_id)
+    form.fields['tipas'].queryset = ExpenseTypes.objects.filter(keeper=keeper)
+    if form.is_valid():
+        form.save()
+        return redirect('viewKeeper', keeper_id)
+    return render(request, 'expense-form.html', {'form': form, 'keeper':keeper})
 
 def editExpense(request, keeper_id, expense_id):
+    keeper = Keeper.objects.get(id=keeper_id)
     expense = Expenses.objects.get(id=expense_id)
     form = ExpenseForm(request.POST or None, instance=expense)
     if form.is_valid():
          form.save()
          return redirect('viewKeeper', keeper_id)
-    return render(request, 'expense-form.html', {'form':form, 'expense': expense})
+    return render(request, 'expense-form.html', {'form':form, 'expense': expense, 'keeper':keeper})
 
 def deleteExpense(request, keeper_id, expense_id):
+    keeper = Keeper.objects.get(id=keeper_id)
     expense = Expenses.objects.get(id=expense_id)
     if request.method == 'POST':
         expense.delete()
         return redirect('viewKeeper', keeper_id)
-    return render(request, 'confirm-expense-deletion.html', {'expense': expense})
+    return render(request, 'confirm-expense-deletion.html', {'expense': expense, "keeper": keeper})
 
 
 #Expense type views
 def createType(request, keeper_id):
+    keeper = Keeper.objects.get(id=keeper_id)
     form = ExpenseTypeForm(request.POST or None, initial={'keeper':keeper_id})
     if form.is_valid():
         form.save()
         return redirect('viewKeeper', keeper_id)
-    return render(request, 'expense-type-form.html', {'form': form})
+    return render(request, 'expense-type-form.html', {'form': form, 'keeper': keeper})
 
 def editType(request, keeper_id, type_id):
-    keeper_ = Keeper.objects.get(id=keeper_id)
-    expense_type = ExpenseTypes.objects.get(keeper=keeper_, id=type_id)
+    keeper = Keeper.objects.get(id=keeper_id)
+    expense_type = ExpenseTypes.objects.get(keeper=keeper, id=type_id)
     form = ExpenseTypeForm(request.POST or None, instance=expense_type)
     if form.is_valid():
         form.save()
         return redirect('viewKeeper', keeper_id)
-    return render(request, 'expense-type-form.html', {'form': form, 'expense_type': expense_type})
+    return render(request, 'expense-type-form.html', {'form': form, 'expense_type': expense_type, 'keeper': keeper})
 
 def deleteType(request, keeper_id, type_id):
-    keeper_ = Keeper.objects.get(id=keeper_id)
-    expense_type = ExpenseTypes.objects.get(keeper=keeper_, id=type_id)
+    keeper = Keeper.objects.get(id=keeper_id)
+    expense_type = ExpenseTypes.objects.get(keeper=keeper, id=type_id)
     if request.method == 'POST':
         expense_type.delete()
         return redirect('viewKeeper', keeper_id)
-    return render(request, 'confirm-expense-type-deletion.html', {'expense_type': expense_type})
+    return render(request, 'confirm-expense-type-deletion.html', {'expense_type': expense_type, "keeper": keeper})

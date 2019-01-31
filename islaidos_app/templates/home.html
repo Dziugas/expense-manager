@@ -1,28 +1,36 @@
 {% extends 'base.html' %}
 
 {% block content %}
-
-<div class="display-4 mb-4">
-    Create a new expense keeper
-</div>
-
-<form method="POST">
-    <div class="form-group">
-        {% csrf_token %}
-        {{ form }}
+<div class="container">
+    <div class="row">
+        <div class="col-6">
+            <div class="display-4 mb-4">
+                Lastest keepers
+            </div>
+            {% if keepers %}
+            {% for keeper in keepers %}
+                <div class="lead">
+                    <a href="{% url 'viewKeeper' keeper.id %}">{{keeper.keeper_name}}</a> by {{keeper.user_name}}
+                </div>
+            <br>
+            {% endfor %}
+            {% endif %}
+        </div>
+        <div class="col-6">
+            <div class="display-4 mb-4">
+                New expense keeper
+            </div>
+            <form method="POST">
+                <div class="form-group">
+                    {% csrf_token %}
+                    {{ form }}
+                </div>
+                <button type="submit" class="btn btn-dark mb-5">Create</button>
+            </form>
+        </div>
     </div>
-    <button type="submit" class="btn btn-dark mb-5">Create</button>
-</form>
-
-<div class="display-4 mb-4">
-    Lastest keepers
 </div>
 
-{% if keepers %}
-{% for keeper in keepers %}
-<div><a href="{% url 'viewKeeper' keeper.id %}">{{keeper.keeper_name}}</a> by {{keeper.user_name}}</div>
-{% endfor %}
-{% endif %}
 <hr>
 <br>
 <br>

@@ -10,6 +10,30 @@
     <script type="text/javascript" src="/static/js/barchart.js"></script>
 
 {% endblock %}
+
+{% block home %}
+<div class="text-left ml-4">
+    <button class="btn btn-success">
+        <a style="color: inherit; text-decoration:none;"
+           href="{% url 'home' %}">Home</a>
+    </button>
+</div>
+
+{% endblock %}
+
+{% block buttons %}
+<div class="text-right mr-4">
+    <button class="btn btn-dark">
+        <a style="color: inherit; text-decoration:none;"
+           href="{% url 'editKeeper' keeper.id %}">Edit Keeper</a>
+    </button>
+    <button class="btn btn-dark">
+        <a style="color: inherit; text-decoration:none;"
+           href="{% url 'deleteKeeper' keeper.id %}">Delete Keeper</a>
+    </button>
+</div>
+{% endblock %}
+
 {% block content %}
 
 <div class="display-4 mb-4">
@@ -68,7 +92,7 @@
         <th>Description</th>
         <th>Supplier</th>
         <th>Doc No</th>
-        <th>Amount</th>
+        <th>Amount (EUR)</th>
         <th>Delete</th>
     </tr>
     {% for expense in expenses %}

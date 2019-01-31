@@ -1,12 +1,14 @@
 from django.db import models
+from datetime import datetime
 
 class Keeper(models.Model):
     keeper_name = models.CharField(max_length=50, default=None)
     user_name = models.CharField(max_length=50, default=None)
+    date = models.DateTimeField(blank=True, default=datetime.now)
 
 class ExpenseTypes(models.Model):
     tipas = models.CharField(max_length=50)
-    aktyvus = models.BooleanField()
+    aktyvus = models.BooleanField(default=False)
     keeper = models.ForeignKey(Keeper, default=None, on_delete=models.CASCADE)
 
     def __str__(self):

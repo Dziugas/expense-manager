@@ -14,7 +14,7 @@ class ExpenseTypeForm(forms.ModelForm):
 
     class Meta:
         model = ExpenseTypes
-        fields = ['tipas', 'aktyvus', 'keeper']
+        fields = ['tipas', 'keeper']
 
 class KeeperForm(forms.ModelForm):
     class Meta:
