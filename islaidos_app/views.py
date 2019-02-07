@@ -9,7 +9,7 @@ def expenditure_by_date_for_google_chart(keeper_id):
     distinct_expense_dates_extracted = [date['data'] for date in distinct_expense_dates_for_that_keeper]
     list_for_chart = []
     for date in distinct_expense_dates_extracted:
-        expenses_on_that_date = Expenses.objects.filter(data=date)
+        expenses_on_that_date = all_expenses_for_current_keeper.filter(data=date)
         sum_of_expenses_on_that_day = expenses_on_that_date.aggregate(Sum('suma'))
         sum_of_expenses_on_that_day_nicely_printed = sum_of_expenses_on_that_day['suma__sum']
         list_for_chart.append([date.strftime('%F'), float(sum_of_expenses_on_that_day_nicely_printed)])
