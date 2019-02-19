@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from .models import Expenses, ExpenseTypes, Keeper
 from .forms import ExpenseForm, ExpenseTypeForm, KeeperForm
 from django.db.models import Sum
+from django.contrib.auth.forms import UserCreationForm
 
 def expenditure_by_date_for_google_chart(keeper_id):
     all_expenses_for_current_keeper = Expenses.objects.filter(keeper=keeper_id).order_by('data')
@@ -30,16 +31,42 @@ def expenditure_by_keepers_expense_types_for_google_chart(keeper_id):
         list_for_chart.insert(0, ['Expense type', 'Total Sum'])
     return list_for_chart
 
+
 def home(request):
     keepers = Keeper.objects.all()
     if request.method == 'POST':
-        form = KeeperForm(request.POST)
-        if form.is_valid():
-            new_keeper = form.save()
-            return redirect(f'/keepers/{new_keeper.id}/')
+        form_1 = UserCreationForm(request.POST)
+        if form_1.is_valid():
+            user = form_1.save()
+        form_2 = KeeperForm(request.POST)
+        if form_2.is_valid():
+            new_keeper = form_2.save()
+            new_keeper.user_name = user
+            new_keeper.save()
+        return redirect(f'/keepers/{new_keeper.id}/')
     else:
-        form = KeeperForm()
-    return render(request, 'home.html', {'keepers':keepers, 'form':form})
+        form_1 = UserCreationForm()
+        form_2 = KeeperForm()
+    return render(request, 'home.html', {'keepers':keepers, 'form_1':form_1, 'form_2':form_2})
+
+
+
+
+
+# def home(request):
+#     keepers = Keeper.objects.all()
+#     if request.method == 'POST':
+#         form = KeeperForm(request.POST)
+#         if form.is_valid():
+#             new_keeper = form.save()
+#             return redirect(f'/keepers/{new_keeper.id}/')
+#     else:
+#         form = KeeperForm()
+#     return render(request, 'home.html', {'keepers':keepers, 'form':form})
+
+
+
+
 
 def viewKeeper(request, keeper_id):
     chart_data = expenditure_by_keepers_expense_types_for_google_chart(keeper_id)

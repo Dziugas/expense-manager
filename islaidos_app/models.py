@@ -1,10 +1,11 @@
 from django.db import models
 from datetime import datetime
+from django.contrib.auth.models import User
 
 class Keeper(models.Model):
     keeper_name = models.CharField(max_length=50, default=None)
-    user_name = models.CharField(max_length=50, default=None)
     date = models.DateTimeField(blank=True, default=datetime.now)
+    user_name = models.ForeignKey(User, max_length=50, default=None, on_delete=models.CASCADE)
 
 class ExpenseTypes(models.Model):
     tipas = models.CharField(max_length=50)
