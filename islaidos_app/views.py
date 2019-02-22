@@ -2,7 +2,8 @@ from django.shortcuts import render, redirect
 from .models import Expenses, ExpenseTypes, Keeper
 from .forms import ExpenseForm, ExpenseTypeForm, KeeperForm
 from django.db.models import Sum
-from django.contrib.auth.forms import UserCreationForm
+
+#data for charts
 
 def expenditure_by_date_for_google_chart(keeper_id):
     all_expenses_for_current_keeper = Expenses.objects.filter(keeper=keeper_id).order_by('data')
@@ -31,42 +32,7 @@ def expenditure_by_keepers_expense_types_for_google_chart(keeper_id):
         list_for_chart.insert(0, ['Expense type', 'Total Sum'])
     return list_for_chart
 
-
-def home(request):
-    keepers = Keeper.objects.all()
-    if request.method == 'POST':
-        form_1 = UserCreationForm(request.POST)
-        if form_1.is_valid():
-            user = form_1.save()
-        form_2 = KeeperForm(request.POST)
-        if form_2.is_valid():
-            new_keeper = form_2.save()
-            new_keeper.user_name = user
-            new_keeper.save()
-        return redirect(f'/keepers/{new_keeper.id}/')
-    else:
-        form_1 = UserCreationForm()
-        form_2 = KeeperForm()
-    return render(request, 'home.html', {'keepers':keepers, 'form_1':form_1, 'form_2':form_2})
-
-
-
-
-
-# def home(request):
-#     keepers = Keeper.objects.all()
-#     if request.method == 'POST':
-#         form = KeeperForm(request.POST)
-#         if form.is_valid():
-#             new_keeper = form.save()
-#             return redirect(f'/keepers/{new_keeper.id}/')
-#     else:
-#         form = KeeperForm()
-#     return render(request, 'home.html', {'keepers':keepers, 'form':form})
-
-
-
-
+#Keeper views
 
 def viewKeeper(request, keeper_id):
     chart_data = expenditure_by_keepers_expense_types_for_google_chart(keeper_id)
@@ -84,12 +50,13 @@ def viewKeeper(request, keeper_id):
     expenses_total = list(expenses.aggregate(Sum('suma')).values())[0]
     return render(request, 'keeper.html', {'keeper':keeper_, 'expense_types':expense_types, 'expenses':expenses, \
                                            'chart_data':chart_data, 'expenses_total':expenses_total, 'chart_data_2':chart_data_2})
+
 def editKeeper(request, keeper_id):
     keeper = Keeper.objects.get(id=keeper_id)
     form = KeeperForm(request.POST or None, instance=keeper)
     if form.is_valid():
         form.save()
-        return redirect('viewKeeper', keeper_id)
+        return redirect('islaidos_app:viewKeeper', keeper_id)
     return render(request, 'keeper-form.html', {'form':form, 'keeper':keeper})
 
 def deleteKeeper(request, keeper_id):
@@ -99,13 +66,15 @@ def deleteKeeper(request, keeper_id):
         return redirect('/')
     return render(request, 'confirm-keeper-deletion.html', {'keeper': keeper})
 
+#Expense views
+
 def createExpense(request, keeper_id):
     form = ExpenseForm(request.POST or None, initial={'keeper':keeper_id})
     keeper = Keeper.objects.get(id=keeper_id)
     form.fields['tipas'].queryset = ExpenseTypes.objects.filter(keeper=keeper)
     if form.is_valid():
         form.save()
-        return redirect('viewKeeper', keeper_id)
+        return redirect('islaidos_app:viewKeeper', keeper_id)
     return render(request, 'expense-form.html', {'form': form, 'keeper':keeper})
 
 def editExpense(request, keeper_id, expense_id):
@@ -114,7 +83,7 @@ def editExpense(request, keeper_id, expense_id):
     form = ExpenseForm(request.POST or None, instance=expense)
     if form.is_valid():
          form.save()
-         return redirect('viewKeeper', keeper_id)
+         return redirect('islaidos_app:viewKeeper', keeper_id)
     return render(request, 'expense-form.html', {'form':form, 'expense': expense, 'keeper':keeper})
 
 def deleteExpense(request, keeper_id, expense_id):
@@ -122,7 +91,7 @@ def deleteExpense(request, keeper_id, expense_id):
     expense = Expenses.objects.get(id=expense_id)
     if request.method == 'POST':
         expense.delete()
-        return redirect('viewKeeper', keeper_id)
+        return redirect('islaidos_app:viewKeeper', keeper_id)
     return render(request, 'confirm-expense-deletion.html', {'expense': expense, "keeper": keeper})
 
 
@@ -132,7 +101,7 @@ def createType(request, keeper_id):
     form = ExpenseTypeForm(request.POST or None, initial={'keeper':keeper_id})
     if form.is_valid():
         form.save()
-        return redirect('viewKeeper', keeper_id)
+        return redirect('islaidos_app:viewKeeper', keeper_id)
     return render(request, 'expense-type-form.html', {'form': form, 'keeper': keeper})
 
 def editType(request, keeper_id, type_id):
@@ -141,7 +110,7 @@ def editType(request, keeper_id, type_id):
     form = ExpenseTypeForm(request.POST or None, instance=expense_type)
     if form.is_valid():
         form.save()
-        return redirect('viewKeeper', keeper_id)
+        return redirect('islaidos_app:viewKeeper', keeper_id)
     return render(request, 'expense-type-form.html', {'form': form, 'expense_type': expense_type, 'keeper': keeper})
 
 def deleteType(request, keeper_id, type_id):
@@ -149,5 +118,5 @@ def deleteType(request, keeper_id, type_id):
     expense_type = ExpenseTypes.objects.get(keeper=keeper, id=type_id)
     if request.method == 'POST':
         expense_type.delete()
-        return redirect('viewKeeper', keeper_id)
+        return redirect('islaidos_app:viewKeeper', keeper_id)
     return render(request, 'confirm-expense-type-deletion.html', {'expense_type': expense_type, "keeper": keeper})

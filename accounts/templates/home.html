@@ -10,7 +10,11 @@
             {% if keepers %}
             {% for keeper in keepers %}
                 <div class="lead">
-                    <a href="{% url 'viewKeeper' keeper.id %}">{{keeper.keeper_name}}</a> by {{keeper.user_name}}
+                    <a href="{% url 'islaidos_app:viewKeeper' keeper.id %}">{{keeper.keeper_name}}</a> by
+                    {% for user in keeper.users.all %}
+                    <a href="{% url 'accounts:viewUser' user.id %}">{{ user.username }}</a>
+                    {% endfor %}
+
                 </div>
             <br>
             {% endfor %}
@@ -18,17 +22,13 @@
         </div>
         <div class="col-lg-6 col-md-6 col-sm-12">
             <div class="display-4 mb-4">
-                New expense keeper
+                Sign up
             </div>
-            <form method="post" action="{% url 'home' %}">
+            <form method="post" action="">
                 <div class="form-group">
                     {% csrf_token %}
-                    {{ form_1 }}
-                    <br>
-                    <br>
-                    <p>Keeper Name</p>
-                    {{ form_2 }}
-
+                    {{ user_form.as_p }}
+                    {{ keeper_form.as_p }}
                 </div>
                 <button type="submit" class="btn btn-dark mb-5">Create</button>
             </form>

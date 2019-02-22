@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block content %}
+
+Welcome, {{ user.username }},
+<br><br>
+if pirma karta:
+<br>here is your first keeper:
+{% for keeper in user.keepers.all %}
+<a href="{% url 'islaidos_app:viewKeeper' keeper.id %}">{{keeper.keeper_name}}</a>
+{% endfor %}
+<br>
+<br>if nepirma karta (po logino):<br>
+here are your latest keepers:
+<br>
+<br>
+{% endblock %}

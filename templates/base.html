@@ -17,14 +17,12 @@
 <body>
 
 <div class="jumbotron bg-dark text-muted text-center mb-4">
-    {% if '/keepers/' in request.path %}
         <div class="text-left ml-4">
             <button class="btn btn-success">
                 <a style="color: inherit; text-decoration:none;"
-                   href="{% url 'home' %}">Home</a>
+                   href="{% url 'accounts:home' %}">Home</a>
             </button>
         </div>
-    {% endif %}
     <div class="container">
         {% if '/keepers/' in request.path %}
         <h1 class="display-1">
