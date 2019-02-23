@@ -21,17 +21,31 @@
             {% endif %}
         </div>
         <div class="col-lg-6 col-md-6 col-sm-12">
+
+            <div class="display-4 mb-4">
+                Login
+            </div>
+            <form method="post">
+                <div class="form-group">
+                    {% csrf_token %}
+                    {{ authentication_form }}
+                </div>
+                <button type="submit" class="btn btn-dark mb-5">Login</button>
+            </form>
+
             <div class="display-4 mb-4">
                 Sign up
             </div>
-            <form method="post" action="">
+            <form method="post">
                 <div class="form-group">
                     {% csrf_token %}
                     {{ user_form.as_p }}
                     {{ keeper_form.as_p }}
                 </div>
+
                 <button type="submit" class="btn btn-dark mb-5">Create</button>
             </form>
+
         </div>
     </div>
 </div>

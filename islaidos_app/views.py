@@ -3,6 +3,8 @@ from .models import Expenses, ExpenseTypes, Keeper
 from .forms import ExpenseForm, ExpenseTypeForm, KeeperForm
 from django.db.models import Sum
 
+from django.contrib.auth.decorators import login_required
+
 #data for charts
 
 def expenditure_by_date_for_google_chart(keeper_id):
@@ -51,6 +53,7 @@ def viewKeeper(request, keeper_id):
     return render(request, 'keeper.html', {'keeper':keeper_, 'expense_types':expense_types, 'expenses':expenses, \
                                            'chart_data':chart_data, 'expenses_total':expenses_total, 'chart_data_2':chart_data_2})
 
+@login_required
 def editKeeper(request, keeper_id):
     keeper = Keeper.objects.get(id=keeper_id)
     form = KeeperForm(request.POST or None, instance=keeper)
@@ -59,6 +62,7 @@ def editKeeper(request, keeper_id):
         return redirect('islaidos_app:viewKeeper', keeper_id)
     return render(request, 'keeper-form.html', {'form':form, 'keeper':keeper})
 
+@login_required
 def deleteKeeper(request, keeper_id):
     keeper = Keeper.objects.get(id=keeper_id)
     if request.method == 'POST':
@@ -67,7 +71,7 @@ def deleteKeeper(request, keeper_id):
     return render(request, 'confirm-keeper-deletion.html', {'keeper': keeper})
 
 #Expense views
-
+@login_required
 def createExpense(request, keeper_id):
     form = ExpenseForm(request.POST or None, initial={'keeper':keeper_id})
     keeper = Keeper.objects.get(id=keeper_id)
@@ -77,6 +81,7 @@ def createExpense(request, keeper_id):
         return redirect('islaidos_app:viewKeeper', keeper_id)
     return render(request, 'expense-form.html', {'form': form, 'keeper':keeper})
 
+@login_required
 def editExpense(request, keeper_id, expense_id):
     keeper = Keeper.objects.get(id=keeper_id)
     expense = Expenses.objects.get(id=expense_id)
@@ -94,8 +99,8 @@ def deleteExpense(request, keeper_id, expense_id):
         return redirect('islaidos_app:viewKeeper', keeper_id)
     return render(request, 'confirm-expense-deletion.html', {'expense': expense, "keeper": keeper})
 
-
 #Expense type views
+@login_required
 def createType(request, keeper_id):
     keeper = Keeper.objects.get(id=keeper_id)
     form = ExpenseTypeForm(request.POST or None, initial={'keeper':keeper_id})
@@ -104,6 +109,7 @@ def createType(request, keeper_id):
         return redirect('islaidos_app:viewKeeper', keeper_id)
     return render(request, 'expense-type-form.html', {'form': form, 'keeper': keeper})
 
+@login_required
 def editType(request, keeper_id, type_id):
     keeper = Keeper.objects.get(id=keeper_id)
     expense_type = ExpenseTypes.objects.get(keeper=keeper, id=type_id)
@@ -113,6 +119,7 @@ def editType(request, keeper_id, type_id):
         return redirect('islaidos_app:viewKeeper', keeper_id)
     return render(request, 'expense-type-form.html', {'form': form, 'expense_type': expense_type, 'keeper': keeper})
 
+@login_required
 def deleteType(request, keeper_id, type_id):
     keeper = Keeper.objects.get(id=keeper_id)
     expense_type = ExpenseTypes.objects.get(keeper=keeper, id=type_id)

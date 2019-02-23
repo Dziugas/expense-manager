@@ -130,3 +130,6 @@ STATICFILES_DIRS = (
 )
 
 STATIC_ROOT = os.path.abspath(os.path.join(BASE_DIR, '../static'))
+
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/'

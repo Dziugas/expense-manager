@@ -1,16 +1,32 @@
 {% extends 'base.html' %}
 {% block content %}
 
-Welcome, {{ user.username }},
-<br><br>
-if pirma karta:
-<br>here is your first keeper:
-{% for keeper in user.keepers.all %}
-<a href="{% url 'islaidos_app:viewKeeper' keeper.id %}">{{keeper.keeper_name}}</a>
-{% endfor %}
-<br>
-<br>if nepirma karta (po logino):<br>
-here are your latest keepers:
+<div class="row">
+    <div class="col-6">
+        <p class="lead">Welcome, {{ user.username }},</p>
+        {% if user.keepers.all.count == 1 %}
+        <p class="lead">Here is your keeper:</p>
+        {% else %}
+        <p class="lead">Here are your keepers:</p>
+        {% endif %}
+        <ul style="list-style-type:none;">
+            {% for keeper in user.keepers.all %}
+            <li><a href="{% url 'islaidos_app:viewKeeper' keeper.id %}">{{keeper.keeper_name}}</a></li>
+            {% endfor %}
+        </ul>
+    </div>
+    <div class="col-6">
+        <p class="lead">Create a new keeper:</p>
+        <form method="post">
+            <div class="form-group">
+                {% csrf_token %}
+                {{ form }}
+                <button class="btn btn-dark" type="submit">Create</button>
+            </div>
+        </form>
+    </div>
+</div>
+
 <br>
 <br>
 {% endblock %}

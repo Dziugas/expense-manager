@@ -20,4 +20,5 @@ urlpatterns = [
     path('', include('accounts.urls')),
     path('keepers/', include('islaidos_app.urls')),
     path('admin/', admin.site.urls),
+    path('accounts/', include('django.contrib.auth.urls')),
 ]
