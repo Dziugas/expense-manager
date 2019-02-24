@@ -3,24 +3,25 @@
 
 <div class="row">
     <div class="col-6">
-        <p class="lead">Welcome, {{ user.username }},</p>
+        <p class="lead font-weight-bold">Welcome, {{ user.username }},</p>
         {% if user.keepers.all.count == 1 %}
         <p class="lead">Here is your keeper:</p>
         {% else %}
         <p class="lead">Here are your keepers:</p>
         {% endif %}
-        <ul style="list-style-type:none;">
+        <ul style="list-style: none; padding-left: 0;">
             {% for keeper in user.keepers.all %}
-            <li><a href="{% url 'islaidos_app:viewKeeper' keeper.id %}">{{keeper.keeper_name}}</a></li>
+            <li class="mb-1"><a class="lead" href="{% url 'islaidos_app:viewKeeper' keeper.id %}">{{keeper.keeper_name}}</a></li>
             {% endfor %}
         </ul>
     </div>
     <div class="col-6">
-        <p class="lead">Create a new keeper:</p>
+        <p class="lead font-weight-bold">Create a new keeper:</p>
         <form method="post">
             <div class="form-group">
                 {% csrf_token %}
-                {{ form }}
+                <p class="lead">{{ form.keeper_name.label }}</p>
+                <p class="lead">{{ form.keeper_name }}</p>
                 <button class="btn btn-dark" type="submit">Create</button>
             </div>
         </form>

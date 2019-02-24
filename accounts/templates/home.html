@@ -5,7 +5,7 @@
     <div class="row">
         <div class="col-lg-6 col-md-6 col-sm-12">
             <div class="display-4 mb-4">
-                Lastest keepers
+                Public keepers
             </div>
             {% if keepers %}
             {% for keeper in keepers %}
@@ -21,31 +21,30 @@
             {% endif %}
         </div>
         <div class="col-lg-6 col-md-6 col-sm-12">
-
-            <div class="display-4 mb-4">
-                Login
-            </div>
-            <form method="post">
-                <div class="form-group">
-                    {% csrf_token %}
-                    {{ authentication_form }}
-                </div>
-                <button type="submit" class="btn btn-dark mb-5">Login</button>
-            </form>
-
+            {% if not user.is_authenticated %}
             <div class="display-4 mb-4">
                 Sign up
             </div>
+
+
             <form method="post">
                 <div class="form-group">
                     {% csrf_token %}
-                    {{ user_form.as_p }}
-                    {{ keeper_form.as_p }}
+                    <p class="lead"> {{ user_form.username.label }}</p>
+                    <p class="lead"> {{ user_form.username }}</p>
+                    <p class="lead"> {{ user_form.password1.label }}</p>
+                    <p class="lead">  {{ user_form.password1 }}</p>
+                    <p class="lead"> {{ user_form.password2.label }}</p>
+                    <p class="lead"> {{ user_form.password2 }}</p>
+                    <p class="lead">Name of your first keeper:</p>
+                    <p class="lead">{{ keeper_form.keeper_name }}</p>
                 </div>
-
                 <button type="submit" class="btn btn-dark mb-5">Create</button>
             </form>
 
+
+
+            {% endif %}
         </div>
     </div>
 </div>

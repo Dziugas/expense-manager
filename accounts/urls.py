@@ -6,4 +6,5 @@ app_name = 'accounts'
 urlpatterns = [
     path('', views.home, name='home'),
     path('users/<int:user_id>/', views.viewUser, name='viewUser'),
+    path('in/', views.loggedIn, name='loggedIn')
 ]
