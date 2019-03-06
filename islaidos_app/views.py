@@ -1,8 +1,10 @@
 from django.shortcuts import render, redirect
+from django.http import Http404
 from .models import Expenses, ExpenseTypes, Keeper
 from .forms import ExpenseForm, ExpenseTypeForm, KeeperForm
 from django.db.models import Sum
 
+from django.core.exceptions import PermissionDenied
 from django.contrib.auth.decorators import login_required
 
 #data for charts
@@ -34,12 +36,31 @@ def expenditure_by_keepers_expense_types_for_google_chart(keeper_id):
         list_for_chart.insert(0, ['Expense type', 'Total Sum'])
     return list_for_chart
 
-#Keeper views
 
+#Check if keeper instance is public and if the user is the creator of keeper instance
+def get_keeper(keeper_id):
+    try:
+        keeper_ = Keeper.objects.get(id=keeper_id)
+        return (keeper_)
+    except Keeper.DoesNotExist:
+        raise Http404("Keeper does not exist")
+
+def check_if_user_is_owner(request, keeper):
+    keeper_users = keeper.users.all()
+    user = request.user
+    if user not in keeper_users:
+        raise PermissionDenied
+
+#Keeper views
 def viewKeeper(request, keeper_id):
+    keeper_ = get_keeper(keeper_id)
+
+    if not keeper_.is_public == True:
+        check_if_user_is_owner(request, keeper_)
+
     chart_data = expenditure_by_keepers_expense_types_for_google_chart(keeper_id)
     chart_data_2 = expenditure_by_date_for_google_chart(keeper_id)
-    keeper_ = Keeper.objects.get(id=keeper_id)
+
     expense_types = ExpenseTypes.objects.filter(keeper=keeper_)
     for expense_type in expense_types:
         expenses = Expenses.objects.filter(tipas=expense_type)
@@ -55,7 +76,10 @@ def viewKeeper(request, keeper_id):
 
 @login_required
 def editKeeper(request, keeper_id):
-    keeper = Keeper.objects.get(id=keeper_id)
+    keeper = get_keeper(keeper_id)
+
+    check_if_user_is_owner(request, keeper)
+
     form = KeeperForm(request.POST or None, instance=keeper)
     if form.is_valid():
         form.save()
@@ -64,7 +88,10 @@ def editKeeper(request, keeper_id):
 
 @login_required
 def deleteKeeper(request, keeper_id):
-    keeper = Keeper.objects.get(id=keeper_id)
+    keeper = get_keeper(keeper_id)
+
+    check_if_user_is_owner(request, keeper)
+
     if request.method == 'POST':
         keeper.delete()
         return redirect('/')
@@ -73,8 +100,11 @@ def deleteKeeper(request, keeper_id):
 #Expense views
 @login_required
 def createExpense(request, keeper_id):
+    keeper = get_keeper(keeper_id)
     form = ExpenseForm(request.POST or None, initial={'keeper':keeper_id})
-    keeper = Keeper.objects.get(id=keeper_id)
+
+    check_if_user_is_owner(request, keeper)
+
     form.fields['tipas'].queryset = ExpenseTypes.objects.filter(keeper=keeper)
     if form.is_valid():
         form.save()
@@ -83,7 +113,10 @@ def createExpense(request, keeper_id):
 
 @login_required
 def editExpense(request, keeper_id, expense_id):
-    keeper = Keeper.objects.get(id=keeper_id)
+    keeper = get_keeper(keeper_id)
+
+    check_if_user_is_owner(request, keeper)
+
     expense = Expenses.objects.get(id=expense_id)
     form = ExpenseForm(request.POST or None, instance=expense)
     if form.is_valid():
@@ -92,7 +125,10 @@ def editExpense(request, keeper_id, expense_id):
     return render(request, 'expense-form.html', {'form':form, 'expense': expense, 'keeper':keeper})
 
 def deleteExpense(request, keeper_id, expense_id):
-    keeper = Keeper.objects.get(id=keeper_id)
+    keeper = get_keeper(keeper_id)
+
+    check_if_user_is_owner(request, keeper)
+
     expense = Expenses.objects.get(id=expense_id)
     if request.method == 'POST':
         expense.delete()
@@ -102,7 +138,10 @@ def deleteExpense(request, keeper_id, expense_id):
 #Expense type views
 @login_required
 def createType(request, keeper_id):
-    keeper = Keeper.objects.get(id=keeper_id)
+    keeper = get_keeper(keeper_id)
+
+    check_if_user_is_owner(request, keeper)
+
     form = ExpenseTypeForm(request.POST or None, initial={'keeper':keeper_id})
     if form.is_valid():
         form.save()
@@ -111,7 +150,10 @@ def createType(request, keeper_id):
 
 @login_required
 def editType(request, keeper_id, type_id):
-    keeper = Keeper.objects.get(id=keeper_id)
+    keeper = get_keeper(keeper_id)
+
+    check_if_user_is_owner(request, keeper)
+
     expense_type = ExpenseTypes.objects.get(keeper=keeper, id=type_id)
     form = ExpenseTypeForm(request.POST or None, instance=expense_type)
     if form.is_valid():
@@ -121,9 +163,14 @@ def editType(request, keeper_id, type_id):
 
 @login_required
 def deleteType(request, keeper_id, type_id):
-    keeper = Keeper.objects.get(id=keeper_id)
+    keeper = get_keeper(keeper_id)
+
+    check_if_user_is_owner(request, keeper)
+
     expense_type = ExpenseTypes.objects.get(keeper=keeper, id=type_id)
+
     if request.method == 'POST':
         expense_type.delete()
         return redirect('islaidos_app:viewKeeper', keeper_id)
+
     return render(request, 'confirm-expense-type-deletion.html', {'expense_type': expense_type, "keeper": keeper})

@@ -5,7 +5,10 @@
 
     <p class="lead font-weight-bold">Are you sure you want to delete this keeper?</p>
     <p> Keeper name: {{keeper.keeper_name}}</p>
-    <p> Owner: {{keeper.user_name}}</p>
+    <p> Owner: {% for user in keeper.users.all %}
+                {{ user }}
+                {% endfor %}
+    </p>
 
     <button type="submit" class="btn btn-dark mb-5">
         <a style="color: inherit; text-decoration:none;">Delete</a>

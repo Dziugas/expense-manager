@@ -14,7 +14,6 @@
                     {% for user in keeper.users.all %}
                     <a href="{% url 'accounts:viewUser' user.id %}">{{ user.username }}</a>
                     {% endfor %}
-
                 </div>
             <br>
             {% endfor %}
@@ -36,8 +35,6 @@
                     <p class="lead">  {{ user_form.password1 }}</p>
                     <p class="lead"> {{ user_form.password2.label }}</p>
                     <p class="lead"> {{ user_form.password2 }}</p>
-                    <p class="lead">Name of your first keeper:</p>
-                    <p class="lead">{{ keeper_form.keeper_name }}</p>
                 </div>
                 <button type="submit" class="btn btn-dark mb-5">Create</button>
             </form>

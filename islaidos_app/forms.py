@@ -18,4 +18,4 @@ class ExpenseTypeForm(forms.ModelForm):
 class KeeperForm(forms.ModelForm):
     class Meta:
         model = Keeper
-        fields = ['keeper_name']
+        fields = ['keeper_name', 'is_public']

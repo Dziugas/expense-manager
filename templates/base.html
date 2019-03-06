@@ -50,6 +50,15 @@
         <h1 class="display-1">
             {{keeper.keeper_name}}
         </h1>
+        <div class="lead">
+            {% if keeper.is_public == True %}
+            (public for viewing)
+            {% endif %}
+            {% for user in keeper.users.all %}
+            <br>Owned by: {{ user }}
+            {% endfor %}
+        </div>
+
         <p class="lead">
              Created {{ keeper.date|date:'Y M d, H:i'}}
         </p>

@@ -6,6 +6,7 @@ class Keeper(models.Model):
     keeper_name = models.CharField(max_length=50, default=None)
     date = models.DateTimeField(blank=True, default=datetime.now)
     users = models.ManyToManyField(User, related_name='keepers', default=None)
+    is_public = models.BooleanField(default=False)
 
 class ExpenseTypes(models.Model):
     tipas = models.CharField(max_length=50)

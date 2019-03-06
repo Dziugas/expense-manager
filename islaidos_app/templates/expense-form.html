@@ -21,7 +21,11 @@
     <button class="btn btn-dark mb-5" type="submit" style="text-decoration:none;">
         Save
     </button>
+    <button class="btn btn-dark mb-5">
+        <a style="color: inherit; text-decoration:none;" href="{% url 'islaidos_app:viewKeeper' keeper.id %}">Cancel</a>
+    </button>
 </form>
+
 
 {% endblock %}
 
