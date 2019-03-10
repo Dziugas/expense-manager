@@ -1,23 +1,38 @@
 {% extends 'base.html' %}
+{% block buttons %}
+<div class="text-right mr-4">
+    <button class="btn btn-dark">
+        <a style="color: inherit; text-decoration:none;"
+           href="{% url 'accounts:editUser' user_profile.id %}">Edit User</a>
+    </button>
+    <button class="btn btn-dark">
+        <a style="color: inherit; text-decoration:none;"
+           href="">Delete User</a>
+    </button>
+</div>
+{% endblock %}
 {% block content %}
-
 <div class="row">
     <div class="col-6">
-        <p class="lead font-weight-bold">Welcome, {{ user.username }}!</p>
-        {% if user.keepers.all %}
-            {% if user.keepers.all.count == 1 %}
-            <p class="lead">Here is your keeper:</p>
+
+        <p class="lead font-weight-bold">
+            {% if user_profile.keepers.all.count == 0 %}
+            User has no keepers
+            {% elif user_profile.keepers.all.count == 1 %}
+            {{ user_profile.username }}'s keeper:
             {% else %}
-            <p class="lead">Here are your keepers:</p>
+            {{ user_profile.username }}'s keepers:
             {% endif %}
+        </p>
             <ul style="list-style: none; padding-left: 0;">
-                {% for keeper in user.keepers.all %}
+                {% for keeper in user_profile.keepers.all %}
                 <li class="mb-1"><a class="lead" href="{% url 'islaidos_app:viewKeeper' keeper.id %}">{{keeper.keeper_name}}</a></li>
                 {% endfor %}
             </ul>
-        {% endif %}
+
     </div>
     <div class="col-6">
+        {% if request.user == user_profile %}
         <p class="lead font-weight-bold">Create a new keeper:</p>
         <form method="post">
             <div class="form-group">
@@ -28,6 +43,7 @@
                 <button class="btn btn-dark" type="submit">Create</button>
             </div>
         </form>
+        {% endif %}
     </div>
 </div>
 

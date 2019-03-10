@@ -134,3 +134,5 @@ STATIC_ROOT = os.path.abspath(os.path.join(BASE_DIR, '../static'))
 
 LOGIN_REDIRECT_URL = '/in/'
 LOGOUT_REDIRECT_URL = '/'
+
+AUTH_USER_MODEL = 'accounts.CustomUser'

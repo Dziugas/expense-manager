@@ -52,16 +52,34 @@
         </h1>
         <div class="lead">
             {% if keeper.is_public == True %}
-            (public for viewing)
+            (public keeper)
             {% endif %}
             {% for user in keeper.users.all %}
-            <br>Owned by: {{ user }}
+            <br>Owned by:
+                {% if not user.is_public == True %}
+                anonymous user
+                {% else %}
+                <a href="{% url 'accounts:viewUser' user.id %}">{{ user }}</a>
+                {% endif %}
             {% endfor %}
         </div>
 
         <p class="lead">
              Created {{ keeper.date|date:'Y M d, H:i'}}
         </p>
+        {% elif '/users/' in request.path %}
+        <h1 class="display-1">
+            {{ user_profile.username }}
+        </h1>
+            {% if user_profile.is_public == True %}
+            <p> (public user profile) </p>
+                {% if user_profile.email %}
+                <p>Email:
+                {{ user_profile.email }}
+                </p>
+                {% endif %}
+
+            {% endif %}
         {% else %}
         <h1 class="display-1">
             Expense Keepers

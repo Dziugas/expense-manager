@@ -12,7 +12,11 @@
                 <div class="lead">
                     <a href="{% url 'islaidos_app:viewKeeper' keeper.id %}">{{keeper.keeper_name}}</a> by
                     {% for user in keeper.users.all %}
+                    {% if not user.is_public == True %}
+                        anonymous user
+                    {% else %}
                     <a href="{% url 'accounts:viewUser' user.id %}">{{ user.username }}</a>
+                    {% endif %}
                     {% endfor %}
                 </div>
             <br>
@@ -31,10 +35,16 @@
                     {% csrf_token %}
                     <p class="lead"> {{ user_form.username.label }}</p>
                     <p class="lead"> {{ user_form.username }}</p>
+                    <p class="lead"> {{ user_form.email.label }} (optional)</p>
+                    <p class="lead"> {{ user_form.email }}</p>
+
                     <p class="lead"> {{ user_form.password1.label }}</p>
                     <p class="lead">  {{ user_form.password1 }}</p>
                     <p class="lead"> {{ user_form.password2.label }}</p>
                     <p class="lead"> {{ user_form.password2 }}</p>
+
+                    <p class="lead"> {{ user_form.is_public.label }}</p>
+                    <p class="lead"> {{ user_form.is_public }}</p>
                 </div>
                 <button type="submit" class="btn btn-dark mb-5">Create</button>
             </form>
