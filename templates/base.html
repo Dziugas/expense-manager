@@ -18,15 +18,17 @@
 
 <div class="jumbotron bg-dark text-muted text-center mb-4 p-4">
 
-    <div class="row">
-        <div class="col 6 text-left">
-            <button class="btn btn-success">
-                <a style="color: inherit; text-decoration:none;"
-                   href="{% url 'accounts:home' %}">Home</a>
-            </button>
-        </div>
 
-        <div class="col-6 text-right">
+
+    <div class="container">
+        <div class="row">
+            <div class="col-4 text-left p-0">
+                <button class="btn btn-success">
+                    <a style="color: inherit; text-decoration:none;"
+                       href="{% url 'accounts:home' %}">Home</a>
+                </button>
+            </div>
+            <div class="col-8 text-right p-0">
             {% if user.is_authenticated %}
             <button class="btn btn-success">
                 <a style="color: inherit; text-decoration:none;"
@@ -43,9 +45,7 @@
             </button>
             {% endif %}
         </div>
-   </div>
-
-    <div class="container">
+        </div>
         {% if '/keepers/' in request.path %}
         <h1 class="display-1">
             {{keeper.keeper_name}}
@@ -54,12 +54,12 @@
             {% if keeper.is_public == True %}
             (public keeper)
             {% endif %}
-            {% for user in keeper.users.all %}
             <br>Owned by:
-                {% if not user.is_public == True %}
-                anonymous user
+            {% for user in keeper.users.all %}
+                {% if not user.is_public == True and not user == request.user %}
+                anonymous user,
                 {% else %}
-                <a href="{% url 'accounts:viewUser' user.id %}">{{ user }}</a>
+                <a href="{% url 'accounts:viewUser' user.id %}">{{ user }}, </a>
                 {% endif %}
             {% endfor %}
         </div>

@@ -11,15 +11,13 @@
                 <p class="lead"> {{ form.email.label }} (optional)</p>
                 <p class="lead"> {{ form.email }}</p>
 
-                <p class="lead"> {{ form.password1.label }}</p>
-                <p class="lead">  {{ form.password1 }}</p>
-                <p class="lead"> {{ form.password2.label }}</p>
-                <p class="lead"> {{ form.password2 }}</p>
-
                 <p class="lead"> {{ form.is_public.label }}</p>
                 <p class="lead"> {{ form.is_public }}</p>
             </div>
             <button type="submit" class="btn btn-dark mb-5">Save</button>
+            <button class="btn btn-dark mb-5">
+                <a style="color: inherit; text-decoration:none;" href="{% url 'accounts:viewUser' user_profile.id %}">Cancel</a>
+            </button>
         </form>
     </div>
 </form>

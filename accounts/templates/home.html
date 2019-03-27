@@ -12,10 +12,10 @@
                 <div class="lead">
                     <a href="{% url 'islaidos_app:viewKeeper' keeper.id %}">{{keeper.keeper_name}}</a> by
                     {% for user in keeper.users.all %}
-                    {% if not user.is_public == True %}
-                        anonymous user
+                    {% if not user.is_public == True and not user == request.user %}
+                        anonymous user,
                     {% else %}
-                    <a href="{% url 'accounts:viewUser' user.id %}">{{ user.username }}</a>
+                    <a href="{% url 'accounts:viewUser' user.id %}">{{ user.username }}, </a>
                     {% endif %}
                     {% endfor %}
                 </div>

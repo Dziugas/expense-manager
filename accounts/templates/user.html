@@ -9,7 +9,7 @@
 {% endblock %}
 {% block content %}
 <div class="row">
-    <div class="col-6">
+    <div class="col-lg-6 col-md-6 col-sm-12">
 
         <p class="lead font-weight-bold">
             {% if user_profile.keepers.all.count == 0 %}
@@ -27,7 +27,7 @@
             </ul>
 
     </div>
-    <div class="col-6">
+    <div class="col-lg-6 col-md-6 col-sm-12">
         {% if request.user == user_profile %}
         <p class="lead font-weight-bold">Create a new keeper:</p>
         <form method="post">
